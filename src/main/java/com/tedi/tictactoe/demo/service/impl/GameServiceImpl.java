@@ -67,8 +67,8 @@ public class GameServiceImpl implements GameService {
         int[][] board = game.getBoard();
         board[gamePlay.getCoordinateX()][gamePlay.getCoordinateY()] = gamePlay.getType().getValue();
 
-        Boolean xWinner = checkWinner(game.getBoard(), TicToe.X);
-        Boolean oWinner = checkWinner(game.getBoard(), TicToe.O);
+        Boolean xWinner = checkWinner(game.getBoard(), game.getBoardSize(), gamePlay.getCoordinateX(), gamePlay.getCoordinateY(),TicToe.X);
+        Boolean oWinner = checkWinner(game.getBoard(), game.getBoardSize(), gamePlay.getCoordinateX(), gamePlay.getCoordinateY(),TicToe.O);
 
         if (xWinner) {
             game.setWinner(TicToe.X);
@@ -80,28 +80,44 @@ public class GameServiceImpl implements GameService {
         return game;
     }
 
-    private Boolean checkWinner(int[][] board, TicToe ticToe) {
-        int[] boardArray = new int[9];
-        int counterIndex = 0;
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                boardArray[counterIndex] = board[i][j];
-                counterIndex++;
+    private Boolean checkWinner(int[][] board, int n, int x, int y, TicToe ticToe) {
+        boolean result = false;
+        for (int i = 0; i < n; i++) {
+            if (board[x][i] != ticToe.getValue())
+                break;
+            if (i == n - 1) {
+                result = true;
             }
         }
 
-        int[][] winCombinations = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}};
-        for (int i = 0; i < winCombinations.length; i++) {
-            int counter = 0;
-            for (int j = 0; j < winCombinations[i].length; j++) {
-                if (boardArray[winCombinations[i][j]] == ticToe.getValue()) {
-                    counter++;
-                    if (counter == 3) {
-                        return true;
-                    }
+        for (int i = 0; i < n; i++) {
+            if (board[i][y] != ticToe.getValue())
+                break;
+            if (i == n - 1) {
+                result = true;
+            }
+        }
+
+        if (x == y) {
+            //we're on a diagonal
+            for (int i = 0; i < n; i++) {
+                if (board[i][i] != ticToe.getValue())
+                    break;
+                if (i == n - 1) {
+                    result = true;
                 }
             }
         }
-        return false;
+
+        if (x + y == n - 1) {
+            for (int i = 0; i < n; i++) {
+                if (board[i][(n - 1) - i] != ticToe.getValue())
+                    break;
+                if (i == n - 1) {
+                    result = true;
+                }
+            }
+        }
+        return result;
     }
 }

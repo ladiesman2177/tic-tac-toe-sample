@@ -11,7 +11,6 @@ public class Game {
     private int boardSize;
     private int[][] board;
     private TicToe winner;
-    private int[][] winCombinations;
 
     public String getGameId() {
         return gameId;
@@ -67,14 +66,6 @@ public class Game {
 
     public void setWinner(TicToe winner) {
         this.winner = winner;
-    }
-
-    public int[][] getWinCombinations() {
-        return winCombinations;
-    }
-
-    public void setWinCombinations(int[][] winCombinations) {
-        this.winCombinations = winCombinations;
     }
 
 }
